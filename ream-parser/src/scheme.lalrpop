@@ -11,15 +11,15 @@ Expr: AST = { Comment? <ExprClean> };
 
 ExprClean: AST = {
     // Match combined exprs
-    "(" <Exprs> ")" => AST::List(<>),
+    "(" <e:Exprs> ")" => AST::List(e),
     // Match null literal
     "null" => AST::Null,
     // Match numbers
-    Num => AST::Int(<>),
+    <n:Num> => AST::Int(n),
     // Match strings
     <s:r#""(?:[^"\\]|\\.)*""#> => {AST::Str(s[1..(s.len() - 1)].to_owned())},
     // Match all tokens
-    Term => AST::Ident(<>),
+    <t:Term> => AST::Ident(t),
 }
 
 // Match tokens
