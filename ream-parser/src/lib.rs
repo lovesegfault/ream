@@ -1,6 +1,7 @@
 use lalrpop_util::lalrpop_mod;
 
 lalrpop_mod!(pub scheme);
+pub mod ast;
 
 mod tests {
     use crate::scheme;
