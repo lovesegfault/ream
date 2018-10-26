@@ -20,7 +20,7 @@ Expr: AST = {
     // Match strings
     <s:r#""(?:[^"\\]|\\.)*""#> => {AST::Str(s[1..(s.len() - 1)].to_owned())},
     // Discard comments
-    r#"(?s)#\|.*?\|#"# => {},
+    r#"(?s)#\|.*\|#"# => {},
     r#""# => {},
     // Match all tokens
     Term => AST::Ident(<>),
@@ -32,6 +32,6 @@ Term: String = { <t:r#"[A-Za-z_?+*/.=<>-]+[0-9A-Za-z_?+*/.=<>-]*"#> => (t).to_ow
 
 // Match integers
 Num: isize = {
-    <n:r"[-]?[0-9]+"> => isize::from_str(n).unwrap()
+    <n:r"[0-9]+"> => isize::from_str(n).unwrap()
 };
 
