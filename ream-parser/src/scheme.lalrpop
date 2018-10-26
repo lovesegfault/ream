@@ -19,9 +19,6 @@ Expr: AST = {
     Num => AST::Int(<>),
     // Match strings
     <s:r#""(?:[^"\\]|\\.)*""#> => {AST::Str(s[1..(s.len() - 1)].to_owned())},
-    // Discard comments
-    r#"(?s)#\|.*\|#"# => {},
-    r#""# => {},
     // Match all tokens
     Term => AST::Ident(<>),
 }
@@ -35,3 +32,10 @@ Num: isize = {
     <n:r"[0-9]+"> => isize::from_str(n).unwrap()
 };
 
+// Discard comments
+Comment: () = {
+    // Block comments
+    r#"#\|([^#])*\|#"# => {},
+    // Line comments
+    r#";.*\n"# => {},
+}
