@@ -10,7 +10,9 @@ pub Exprs: Vec<AST> = {
 // Regex to match long comments: (?s)#\|.*?\|#
 // Regex to match line comments: ;.*?\n
 
-Expr: AST = {
+Expr: AST = { Comment? <ExprClean> };
+
+ExprClean: AST = {
     // Match combined exprs
     "(" <Exprs> ")" => AST::List(<>),
     // Match null literal
