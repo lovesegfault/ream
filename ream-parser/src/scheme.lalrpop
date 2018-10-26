@@ -7,6 +7,9 @@ pub Exprs: Vec<AST> = {
         <l:(<Expr>)*> => l,
 };
 
+// Regex to match long comments: (?s)#\|.*?\|#
+// Regex to match line comments: ;.*?\n
+
 Expr: AST = {
     // Match combined exprs
     "(" <Exprs> ")" => AST::List(<>),
@@ -15,7 +18,12 @@ Expr: AST = {
     // Match numbers
     Num => AST::Int(<>),
     // Match strings
-    <s:r#""(?:[^"\\]|\\.)*""#> => {  }
+    <s:r#""(?:[^"\\]|\\.)*""#> => {AST::Str(s[1..(s.len() - 1)].to_owned())},
+    // Discard comments
+    r#"(?s)#\|.*?\|#"# => {},
+    r#""# => {},
+    // Match all tokens
+    Term => AST::Ident(<>),
 }
 
 // Match tokens
