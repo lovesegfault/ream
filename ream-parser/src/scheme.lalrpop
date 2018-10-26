@@ -1,0 +1,29 @@
+use std::str::FromStr;
+use ast::AST;
+
+grammar;
+
+pub Exprs: Vec<AST> = {
+        <l:(<Expr>)*> => l,
+};
+
+Expr: AST = {
+    // Match combined exprs
+    "(" <Exprs> ")" => AST::List(<>),
+    // Match null literal
+    "null" => AST::Null,
+    // Match numbers
+    Num => AST::Int(<>),
+    // Match strings
+    <s:r#""(?:[^"\\]|\\.)*""#> => {  }
+}
+
+// Match tokens
+// FIXME: Is this correct?
+Term: String = { <t:r#"[A-Za-z_?+*/.=<>-]+[0-9A-Za-z_?+*/.=<>-]*"#> => (t).to_owned() };
+
+// Match integers
+Num: isize = {
+    <n:r"[-]?[0-9]+"> => isize::from_str(n).unwrap()
+};
+
