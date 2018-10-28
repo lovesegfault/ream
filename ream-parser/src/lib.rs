@@ -4,13 +4,39 @@ lalrpop_mod!(pub scheme);
 pub mod ast;
 
 mod tests {
-    use crate::scheme;
+    use super::*;
 
     #[test]
-    fn num_terminal() {
-        assert!(scheme::NumParser::new().parse("22").is_ok());
-        assert!(scheme::NumParser::new().parse("1523665908450923").is_ok());
-        assert!(scheme::NumParser::new().parse("12349871239487").is_ok());
-        assert!(scheme::NumParser::new().parse("ABCDEF123").is_err());
+    fn numbers() {
+        assert!(scheme::ExprsParser::new().parse("(22)").is_ok());
+        assert!(scheme::ExprsParser::new().parse("1523665908450923").is_ok());
+        assert!(scheme::ExprsParser::new().parse("12349871239487").is_ok());
+    }
+
+    #[test]
+    fn arithmetic() {
+        assert!(scheme::ExprsParser::new().parse("(+ 10 20)").is_ok());
+        assert!(scheme::ExprsParser::new().parse("(- 432 6456)").is_ok());
+        assert!(scheme::ExprsParser::new().parse("(* 86234 4646)").is_ok());
+        assert!(scheme::ExprsParser::new().parse("(/ 243 54732)").is_ok());
+    }
+
+    #[test]
+    fn line_comments() {
+        
+    }
+    #[test]
+    fn block_comments() {
+        let code: &str = "
+        #|
+            Lorem ipsum
+        |#
+
+        (+ 10 40)
+
+        #|dolor sit amet
+        consectetur adipiscing elit
+        Donec rutrum, tellus non euismod accumsan|#";
+        scheme::ExprsParser::new().parse(code).unwrap();
     }
 }
