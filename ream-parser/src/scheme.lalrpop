@@ -17,7 +17,7 @@ ExprClean: AST = {
     // Match numbers
     <n:Num> => AST::Int(n),
     // Match strings
-    <s:r#""(?:[^"\\]|\\.)*""#> => {AST::Str(s[1..(s.len() - 1)].to_owned())},
+    <s:r#""(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'"#> => {AST::Str(s[1..(s.len() - 1)].to_owned())},
     // Match all tokens
     <t:Term> => AST::Ident(t),
 }
