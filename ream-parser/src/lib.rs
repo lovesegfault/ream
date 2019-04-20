@@ -3,6 +3,7 @@ use lalrpop_util::lalrpop_mod;
 lalrpop_mod!(pub scheme);
 pub mod ast;
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -23,7 +24,16 @@ mod tests {
 
     #[test]
     fn line_comments() {
-        
+        let code: &str = "
+        ;Lorem ipsum
+        (+ 10 40)
+
+        ; dolor sit amet
+        (+ 1 80)
+
+        ;consectetur adipiscing elit
+        ;Donec rutrum, tellus non euismod accumsan";
+        scheme::ExprsParser::new().parse(code).unwrap();
     }
     #[test]
     fn block_comments() {

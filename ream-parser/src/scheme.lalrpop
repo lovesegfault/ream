@@ -3,9 +3,7 @@ use crate::ast::AST;
 
 grammar;
 
-pub Exprs: Vec<AST> = {
-        <l:(<Expr>)*> => l,
-};
+pub Exprs: Vec<AST> = { <l:(<Expr>)*> Comment? => l, }
 
 Expr: AST = { Comment? <ExprClean> };
 
@@ -24,7 +22,7 @@ ExprClean: AST = {
 
 // Match tokens
 // FIXME: Is this correct?
-Term: String = { <t:r#"[A-Za-z_?+*/.=<>-]+[0-9A-Za-z_?+*/.=<>-]*"#> => (t).to_owned() };
+Term: String = { <t:r#"[A-Za-z_?+*/.=<>-][0-9A-Za-z_?+*/.=<>-]*"#> => (t).to_owned() };
 
 // Match integers
 Num: isize = {
